@@ -11,13 +11,15 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author jword
+ * @author 641775
  */
-public class Slimecraft extends JFrame  {
+public class Slimecraft extends JFrame{
 
     /**
      * @param args the command line arguments
      */
+        // TODO code application logic here
+
     public static void main(String[] args) {
         JFrame j = new Slimecraft();
         World c = new World();
@@ -29,11 +31,11 @@ public class Slimecraft extends JFrame  {
         j.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                c.keyPressed(e);
+                //c.keyPressed(e);
             }
-            @Override
-            public void keyReleased(KeyEvent e) {
-                c.keyReleased(e);
+           @Override
+           public void keyReleased(KeyEvent e) {
+               //c.keyReleased(e);
             }
         });
     }

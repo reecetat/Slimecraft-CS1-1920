@@ -6,12 +6,12 @@
 package slimecraft;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.Graphics;
 
 /**
  *
- * @author jword
+ * @author 641775
  */
 public abstract class Sprite {
     private int speed;
@@ -19,13 +19,14 @@ public abstract class Sprite {
     private int width, height;
     private Color color;
     private Rectangle bounds;
+    private boolean alive = true;
 
     public Sprite(int speed, int x, int y, int width, int height, Color color) {
         this.speed = speed;
         this.x = x;
         this.y = y;
-        this.vx = (int) (Math.random() * this.speed);
-        this.vy = (int) (Math.random() * this.speed);
+        this.vx = (int) (Math.random() * this.speed * 2 - this.speed);
+        this.vy = (int) (Math.random() * this.speed * 2 - this.speed);
         this.width = width;
         this.height = height;
         this.color = color;
@@ -38,6 +39,11 @@ public abstract class Sprite {
         this.bounds = new Rectangle(x, y, width, height);
     }
     
+    public void grow(double rate) {
+        this.width *= rate;
+        this.height *= rate;
+    }
+    
     public abstract void draw(Graphics g);
 
     public int getWidth() {
@@ -48,6 +54,18 @@ public abstract class Sprite {
         return x;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void die() {
+        this.alive = false;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+    
     public int getY() {
         return y;
     }
@@ -56,11 +74,41 @@ public abstract class Sprite {
         return height;
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     public Color getColor() {
         return color;
     }
     
     public boolean collide(Sprite other) {
-        return this.bounds.intersects(other.bounds);
+        boolean collided = this.bounds.intersects(other.bounds);
+        if (collided) {
+            this.didCollide();
+            other.didCollide();
+        }
+        return collided;
+    }
+    
+    public void collideWorldBounds(int cWidth, int cHeight) {
+        if (this.x < 0 || this.x + this.width > cWidth)
+            this.vx = -this.vx;
+        if (this.y < 0 || this.y + this.height > cHeight)
+            this.vy = -this.vy;       
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+    
+    public void didCollide() {
+        this.vx = -this.vx;
+        this.vy = -this.vy;
+        this.update();
     }
 }
